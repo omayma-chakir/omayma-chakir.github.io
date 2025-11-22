@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+
 @tailwind components;
 
 @layer components {
@@ -149,4 +151,11 @@
         color: var(--codeblock-bg);
     }
   }
+}
+.dancing-script {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+   font-size: 22px;
 }
