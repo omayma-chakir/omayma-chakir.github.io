@@ -7,20 +7,20 @@ category: Windows Forensics
 draft: false
 ---
 
-![Photo by Hans Eiskonen on Unsplash](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*LtncC4aM2anrh9oR)
+<!-- ![Photo by Hans Eiskonen on Unsplash](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*LtncC4aM2anrh9oR) -->
 
 
 
 Prefetch is a utility that is intended to improve Windows and application startup performance by loading application data into memory before it is demanded.
 
 *   **Creation:** A prefetch file is generated the first time an application is executed from a specific path.
-*   **Location:** Stored in C:\Windows\Prefetch
+*   **Location:** Stored in `C:\Windows\Prefetch`
 
 ![C:\Windows\Prefetch](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7fNw8jXdJXFZUs3rA9DYhA.png)
 
 *   **File Naming Convention:**
 
-[ApplicationName]-[8-character_hash_of_path].pf
+`[ApplicationName]-[8-character_hash_of_path].pf`
 
 **Example:** ANYDESK.EXE-D0317C50.pf
 
@@ -105,7 +105,8 @@ What are we seeing ?
 *   The file ran once, from a user temp folder (a red flag!)
 *   It accessed a USB drive (possible data exfiltration)
 
-**Note :** Prefetch records 10 seconds of post-execution activity( sometimes less depending on the exucatable size but its what is mentioned in documentation ) including:
+:::note
+Prefetch records 10 seconds of post-execution activity( sometimes less depending on the exucatable size but its what is mentioned in documentation ) including:
 
 *   Files accessed
 *   Registry keys opened
@@ -113,7 +114,8 @@ What are we seeing ?
 
 Because of this, the actual execution time is typically 10 seconds earlier than the file system timestamp (creation/modification) of the .pf file
 
-**Note :** Prefetch is disabled by default in Windows servers / enabled by default in Windows workstations
+Prefetch is disabled by default in Windows servers / enabled by default in Windows workstations
+:::
 
 🔗 [Prefetch Deep Dive](https://www.youtube.com/watch?v=f4RAtR_3zcs)
 
@@ -121,7 +123,7 @@ Because of this, the actual execution time is typically 10 seconds earlier than 
 
 🔗[Invoke-IR | PowerShell Digital Forensics and Incident Response](https://web.archive.org/web/20241204095737/http://www.invoke-ir.com/2013/09/whats-new-in-prefetch-for-windows-8.html)
 
-🔗[Disabling Prefetch | Microsoft Learn](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ms940847(v=winembedded.5)?redirectedfrom=MSDN) ( only to improve performance 😉)
+🔗[Disabling Prefetch | Microsoft Learn](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ms940847(v=winembedded.5)?redirectedfrom=MSDN) 
 
 🔗[Forensic Analysis of Prefetch files in Windows — Magnet Forensics](https://www.magnetforensics.com/blog/forensic-analysis-of-prefetch-files-in-windows/)
 
