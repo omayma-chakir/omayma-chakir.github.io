@@ -39,23 +39,19 @@ const config = profileConfig;
         <!-- Umami Stats -->
         <div class="stats-divider"></div>
         <div class="flex gap-3 mt-3 mb-1">
-
             <!-- PageViews -->
             <div class="stats-card flex-1">
                 <Icon name="material-symbols:visibility-outline-rounded" class="stats-icon" />
                 <span id="site-pageviews" class="stats-number">--</span>
                 <span class="stats-label">Page Views</span>
             </div>
-
             <!-- Visitors -->
             <div class="stats-card flex-1">
                 <Icon name="material-symbols:person-outline" class="stats-icon" />
                 <span id="site-visitors" class="stats-number">--</span>
                 <span class="stats-label">Visitors</span>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -66,7 +62,6 @@ const config = profileConfig;
         opacity: 0.3;
         margin: 0.75rem 0 0;
     }
-
     .stats-card {
         display: flex;
         flex-direction: column;
@@ -80,20 +75,17 @@ const config = profileConfig;
         -webkit-backdrop-filter: blur(10px);
         transition: all 0.3s ease;
     }
-
     .stats-card:hover {
         background: rgba(255, 255, 255, 0.08);
         border-color: rgba(255, 255, 255, 0.15);
         transform: translateY(-2px);
     }
-
     .stats-icon {
         font-size: 1.1rem;
         color: var(--primary);
         opacity: 0.85;
         margin-bottom: 2px;
     }
-
     .stats-number {
         font-size: 1.1rem;
         font-weight: 700;
@@ -101,7 +93,6 @@ const config = profileConfig;
         line-height: 1;
         letter-spacing: 0.02em;
     }
-
     .stats-label {
         font-size: 0.62rem;
         color: rgba(150, 150, 160, 0.9);
@@ -111,7 +102,7 @@ const config = profileConfig;
     }
 </style>
 
-<script define:vars={{ umamiConfig }}>
+<script is:inline define:vars={{ umamiConfig }}>
     function animateNumber(element, targetValue, duration = 1000) {
         const startTime = performance.now();
 
@@ -158,8 +149,8 @@ const config = profileConfig;
             }
 
             const data = await res.json();
-            const pageviews = data.pageviews || 0;
-            const visitors = data.visitors || 0;
+            const pageviews = data.pageviews?.value ?? data.pageviews ?? 0;
+            const visitors = data.visitors?.value ?? data.visitors ?? 0;
 
             const pvEl = document.getElementById('site-pageviews');
             const uvEl = document.getElementById('site-visitors');
@@ -176,13 +167,17 @@ const config = profileConfig;
         }
     }
 
-  function waitForUmami() {
-    if (typeof getUmamiShareData === 'function') {
-        loadSiteStats();
-    } else {
-        setTimeout(waitForUmami, 100);
+    function waitForUmami() {
+        if (typeof getUmamiShareData === 'function') {
+            loadSiteStats();
+        } else {
+            setTimeout(waitForUmami, 100);
+        }
     }
-}
 
-document.addEventListener('DOMContentLoaded', waitForUmami);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', waitForUmami);
+    } else {
+        waitForUmami();
+    }
 </script>
