@@ -176,5 +176,13 @@ const config = profileConfig;
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadSiteStats);
+  function waitForUmami() {
+    if (typeof getUmamiShareData === 'function') {
+        loadSiteStats();
+    } else {
+        setTimeout(waitForUmami, 100);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', waitForUmami);
 </script>
