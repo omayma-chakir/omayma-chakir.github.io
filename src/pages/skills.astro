@@ -1,0 +1,360 @@
+---
+import Icon from "../components/misc/Icon.astro";
+import IconifyLoader from "../components/misc/IconifyLoader.astro";
+import { siteConfig } from "../config";
+import {
+	professionalSkills,
+	researchSkills,
+	devToolsSkills,
+	skillsData,
+	getAdvancedSkills,
+	getSkillStats,
+	getTotalExperience,
+} from "../data/skills";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+if (!siteConfig.featurePages.skills) {
+	return Astro.redirect("/404/");
+}
+
+const stats = getSkillStats();
+const advancedSkills = getAdvancedSkills();
+const totalExperience = getTotalExperience();
+
+const sections = [
+	{ key: "professional", label: "Professional Skills", skills: professionalSkills },
+	{ key: "research", label: "Research & Coding", skills: researchSkills },
+	{ key: "dev-tools", label: "Frameworks & Tools", skills: devToolsSkills },
+];
+
+const education = [
+	{
+		degree: "Ph.D. in Applied Mathematics & AI",
+		detail: "Focus: Solving Partial Differential Equations using Deep Learning.",
+		period: "2023 — Present",
+		active: true,
+	},
+	{
+		degree: "M.Sc. in Mathematical Engineering",
+		detail: "",
+		period: "2021 — 2023",
+		active: false,
+	},
+	{
+		degree: "B.Sc. in Applied Mathematics",
+		detail: "",
+		period: "2018 — 2021",
+		active: false,
+	},
+];
+
+const career = [
+	{
+		role: "Offensive Security Research",
+		detail: "The offensive side is where my curiosity runs deepest. I study EDR evasion techniques and adversary tradecrafts... because understanding the attacker's mindset is the most efficient way to build a better defense.",
+		period: "Ongoing",
+		active: true,
+	},
+	{
+		role: "Security Engineer / SOC L2",
+		detail: "Architecting defensive infrastructure: deploying EDR/XDR platforms, integrating SIEM solutions across multi-client environments, and leading security operations within Kubernetes-native infrastructure, from asset onboarding to full incident coordination.",
+		period: "Apr 2024 — Present",
+		active: true,
+	},
+	{
+		role: "SOC Analyst L1",
+		detail: "Where the journey started, the unglamorous, high-signal work of watching attacks unfold in real time. Alert triage, incident escalation, and real-time threat monitoring.",
+		period: "Sep 2023 — Apr 2024",
+		active: false,
+	},
+	{
+		role: "AI Research — Internship",
+		detail: "Built prediction models and constructed PDE-based systems from experimental data.",
+		period: "Feb 2023 — Jun 2023",
+		active: false,
+	},
+];
+
+const getLevelColor = (level: string) => {
+	switch (level) {
+		case "expert":
+			return "bg-red-600/20 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+		case "advanced":
+			return "bg-orange-600/20 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400";
+		case "intermediate":
+			return "bg-yellow-600/20 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
+		case "beginner":
+			return "bg-green-600/20 text-green-700 dark:bg-green-900/30 dark:text-green-400";
+		default:
+			return "bg-gray-600/20 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400";
+	}
+};
+
+const getLevelWidth = (level: string) => {
+	switch (level) {
+		case "expert": return "100%";
+		case "advanced": return "80%";
+		case "intermediate": return "60%";
+		case "beginner": return "40%";
+		default: return "20%";
+	}
+};
+
+const title = i18n(I18nKey.skills);
+const subtitle = i18n(I18nKey.skillsSubtitle);
+const allIcons = skillsData.map((skill) => skill.icon).filter(Boolean);
+---
+
+<MainGridLayout title={title} description={subtitle}>
+  <script is:inline>
+    document.documentElement.setAttribute('data-page-type', 'skills');
+  </script>
+  
+  <IconifyLoader preloadIcons={allIcons} />
+
+  <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="card-base z-10 px-9 py-6 relative w-full">
+      
+      <!-- ── Academic Background ── -->
+      <div class="edu-section mb-14">
+        <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-6 relative
+                  before:w-1 before:h-6 before:rounded-md before:bg-[var(--primary)]
+                  before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4">
+          Academic Background
+        </h2>
+        <div class="edu-timeline">
+          {education.map((edu, i) => (
+            <div class={`edu-item ${edu.active ? 'edu-active' : ''}`} style={`animation-delay: ${i * 100}ms`}>
+              <div class="edu-dot-col">
+                <span class={`edu-dot ${edu.active ? 'edu-dot-active' : ''}`}></span>
+                {i < education.length - 1 && <span class="edu-line"></span>}
+              </div>
+              <div class="edu-content">
+                <div class="edu-header">
+                  <h3 class="edu-degree">{edu.degree}</h3>
+                  <span class={`edu-period ${edu.active ? 'edu-period-active' : ''}`}>{edu.period}</span>
+                </div>
+                {edu.detail && <p class="edu-detail">{edu.detail}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- ── Professional Experience — Timeline ── -->
+      <div class="edu-section mb-14">
+        <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-6 relative
+                  before:w-1 before:h-6 before:rounded-md before:bg-[var(--primary)]
+                  before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4">
+          Professional Experience
+        </h2>
+        <div class="edu-timeline">
+          {career.map((job, i) => (
+            <div class={`edu-item ${job.active ? 'edu-active' : ''}`} style={`animation-delay: ${i * 100}ms`}>
+              <div class="edu-dot-col">
+                <span class={`edu-dot ${job.active ? 'edu-dot-active' : ''}`}></span>
+                {i < career.length - 1 && <span class="edu-line"></span>}
+              </div>
+              <div class="edu-content">
+                <div class="edu-header">
+                  <h3 class="edu-degree">{job.role}</h3>
+                  <span class={`edu-period ${job.active ? 'edu-period-active' : ''}`}>{job.period}</span>
+                </div>
+                {job.detail && <p class="edu-detail">{job.detail}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Skill Sections -->
+      <div class="space-y-12 skills-container" style="container-type: inline-size;">
+        {sections.map((section) => {
+          if (section.skills.length === 0) return null;
+          
+          return (
+            <div>
+              <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-6 relative
+                        before:w-1 before:h-6 before:rounded-md before:bg-[var(--primary)]
+                        before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4">
+                {section.label}
+                <span class="text-lg font-normal text-black/60 dark:text-white/60 ml-2">
+                  ({section.skills.length})
+                </span>
+              </h2>
+              <div class="skills-grid-container grid grid-cols-1 gap-4">
+                {section.skills.map((skill) => (
+                  <div class="bg-transparent rounded-lg border border-black/10 dark:border-white/10 p-4 hover:shadow-lg transition-all duration-300 group">
+                    <div class="flex items-start gap-3">
+                      {skill.icon && (
+                        <div class="w-9 h-9 rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-110" style={`background-color: ${skill.color || 'rgb(99 102 241)'}20`}>
+                          <Icon 
+                            icon={skill.icon} 
+                            class="text-lg" 
+                            color={skill.color && skill.color !== '#000000' ? skill.color : 'rgb(99 102 241)'}
+                            fallback={skill.name.charAt(0)}
+                          />
+                        </div>
+                      )}
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                          <h3 class="text-sm font-semibold text-black/85 dark:text-white/85 truncate">
+                            {skill.name}
+                          </h3>
+                          <span class={`px-2 py-0.5 text-[9px] rounded-full shrink-0 ml-2 font-bold uppercase ${getLevelColor(skill.level)}`}>
+                            {skill.level}
+                          </span>
+                        </div>
+                        <p class="text-black/50 dark:text-white/50 mb-2 text-xs line-clamp-2 leading-relaxed">
+                          {skill.description}
+                        </p>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
+                          <div 
+                              class="h-1 rounded-full transition-all duration-300"
+                              style={`width: ${getLevelWidth(skill.level)}; background-color: ${skill.color || 'rgb(99 102 241)'};`}
+                            ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+
+
+    </div>
+  </div>
+</MainGridLayout>
+
+<style>
+  /* ── Skills grid ── */
+  .skills-container { position: relative; }
+  .skills-grid-container { 
+    grid-template-columns: 1fr; 
+    transition: grid-template-columns 0.3s ease; 
+  }
+  @container (min-width: 45rem) { .skills-grid-container { grid-template-columns: repeat(2, 1fr); } }
+  @container (min-width: 65rem) { .skills-grid-container { grid-template-columns: repeat(3, 1fr); } }
+
+  /* ═══════════════════════════════════════════════════
+     Academic Background & Career — Timeline
+     ═══════════════════════════════════════════════════ */
+
+  /* ── Staggered fade-in ── */
+  @keyframes bioFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .edu-timeline {
+    display: flex;
+    flex-direction: column;
+  }
+  .edu-item {
+    display: flex;
+    gap: 1.25rem;
+    animation: bioFadeIn 0.4s ease both;
+  }
+
+  /* Dot + vertical line column */
+  .edu-dot-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 12px;
+    flex-shrink: 0;
+    padding-top: 0.45rem;
+  }
+  .edu-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.20);
+    flex-shrink: 0;
+  }
+  :global(.dark) .edu-dot {
+    background: rgba(255, 255, 255, 0.20);
+  }
+  .edu-dot-active {
+    background: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 99, 102, 241), 0.15);
+  }
+  :global(.dark) .edu-dot-active {
+    background: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 99, 102, 241), 0.20);
+  }
+  .edu-line {
+    width: 1px;
+    flex: 1;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 0.35rem 0;
+  }
+  :global(.dark) .edu-line {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Content */
+  .edu-content {
+    padding-bottom: 1.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .edu-item:last-child .edu-content {
+    padding-bottom: 0;
+  }
+  .edu-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .edu-degree {
+    font-size: 0.95rem;
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.80);
+    line-height: 1.3;
+  }
+  :global(.dark) .edu-degree {
+    color: rgba(255, 255, 255, 0.80);
+  }
+  .edu-period {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.35);
+    white-space: nowrap;
+  }
+  :global(.dark) .edu-period {
+    color: rgba(255, 255, 255, 0.30);
+  }
+  .edu-period-active {
+    color: rgba(0, 0, 0, 0.55);
+    font-weight: 600;
+  }
+  :global(.dark) .edu-period-active {
+    color: rgba(255, 255, 255, 0.50);
+  }
+  .edu-detail {
+    font-size: 0.825rem;
+    color: rgba(0, 0, 0, 0.50);
+    margin-top: 0.3rem;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  :global(.dark) .edu-detail {
+    color: rgba(255, 255, 255, 0.40);
+  }
+</style>

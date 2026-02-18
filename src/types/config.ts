@@ -47,7 +47,8 @@ export type Favicon = {
 export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
-	About = 2,
+	Skills = 2,
+	Timeline = 3,
 }
 
 export type NavBarLink = {
@@ -99,4 +100,20 @@ export type BlogPostData = {
 
 export type ExpressiveCodeConfig = {
 	theme: string;
+};
+
+export type MusicPlayerConfig = {
+    enable: boolean;
+    mode: "meting" | "local";
+    meting_api: string;
+    id: string;
+    server: string;
+    type: string;
+};
+
+import type { MusicPlayerConfig } from "./types/config";
+export const musicPlayerConfig: MusicPlayerConfig = {
+    enable: true,
+    mode: "local", 
+    // API fields are ignored in local mode
 };

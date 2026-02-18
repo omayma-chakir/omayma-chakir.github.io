@@ -50,7 +50,7 @@ You can read more on that here :🔗 [Prefetch Hash Calculator + a hash lookup t
 
 1.  **Prove Program Execution even if the original executable has been deleted**.
 2.  **Support Anti-Forensics Detection ;c**an reveal use of tools like CCleaner or other cleanup utilities used to erase evidence.
-3.  **Aid Malware Investigations ;**Help identify when and how often malicious executables were run.
+3.  **Aid Malware Investigations**Help identify when and how often malicious executables were run.
 4.  **Enable Timeline Analysis by p**rovide timestamps that help reconstruct a user’s or attacker’s activity over time.
 5.  **Link Related Activity :** Multiple prefetch files with the same path hash may indicate execution from the same (possibly deleted) directory, useful in identifying malware clusters.
 

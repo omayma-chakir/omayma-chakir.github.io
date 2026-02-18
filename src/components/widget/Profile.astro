@@ -1,13 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
-import { profileConfig } from "../../config";
+import { profileConfig, umamiConfig } from "../../config";
 import { url } from "../../utils/url-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
-
 const config = profileConfig;
 ---
 <div class="card-base p-3">
-    <a aria-label="Go to About Page" href={url('/about/')}
+    <a aria-label="Go to About Page" href={url('/skills/')}
        class="group block relative mx-auto mt-1 lg:mx-0 lg:mt-0 mb-3
        max-w-[12rem] lg:max-w-none overflow-hidden rounded-xl active:scale-95">
         <div class="absolute transition pointer-events-none group-hover:bg-black/30 group-active:bg-black/50
@@ -16,7 +15,7 @@ const config = profileConfig;
                   class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-5xl">
             </Icon>
         </div>
-        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="mx-auto lg:w-full h-full lg:mt-0 "></ImageWrapper>
+        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="mx-auto lg:w-full h-full lg:mt-0"></ImageWrapper>
     </a>
     <div class="px-2">
         <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
@@ -24,16 +23,158 @@ const config = profileConfig;
         <div class="text-center text-neutral-400 mb-2.5 transition">{config.bio}</div>
         <div class="flex flex-wrap gap-2 justify-center mb-1">
             {config.links.length > 1 && config.links.map(item =>
-                    <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
-                        <Icon name={item.icon} class="text-[1.5rem]"></Icon>
-                    </a>
+                <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
+                    <Icon name={item.icon} class="text-[1.5rem]"></Icon>
+                </a>
             )}
-            {config.links.length == 1 && <a rel="me" aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
-                                            class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95">
-                <Icon name={config.links[0].icon} class="text-[1.5rem]"></Icon>
-                {config.links[0].name}
-            </a>}
+            {config.links.length == 1 &&
+                <a rel="me" aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
+                   class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95">
+                    <Icon name={config.links[0].icon} class="text-[1.5rem]"></Icon>
+                    {config.links[0].name}
+                </a>
+            }
         </div>
+
+        <!-- Umami Stats -->
+        <div class="stats-divider"></div>
+        <div class="flex gap-3 mt-3 mb-1">
+
+            <!-- PageViews -->
+            <div class="stats-card flex-1">
+                <Icon name="material-symbols:visibility-outline-rounded" class="stats-icon" />
+                <span id="site-pageviews" class="stats-number">--</span>
+                <span class="stats-label">Page Views</span>
+            </div>
+
+            <!-- Visitors -->
+            <div class="stats-card flex-1">
+                <Icon name="material-symbols:person-outline" class="stats-icon" />
+                <span id="site-visitors" class="stats-number">--</span>
+                <span class="stats-label">Visitors</span>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
+<style>
+    .stats-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--primary), transparent);
+        opacity: 0.3;
+        margin: 0.75rem 0 0;
+    }
+
+    .stats-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 0.6rem 0.4rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .stats-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .stats-icon {
+        font-size: 1.1rem;
+        color: var(--primary);
+        opacity: 0.85;
+        margin-bottom: 2px;
+    }
+
+    .stats-number {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+        line-height: 1;
+        letter-spacing: 0.02em;
+    }
+
+    .stats-label {
+        font-size: 0.62rem;
+        color: rgba(150, 150, 160, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 1px;
+    }
+</style>
+
+<script define:vars={{ umamiConfig }}>
+    function animateNumber(element, targetValue, duration = 1000) {
+        const startTime = performance.now();
+
+        function easeOutQuart(t) {
+            return 1 - Math.pow(1 - t, 4);
+        }
+
+        function formatNumber(num) {
+            if (num >= 10000) return (num / 10000).toFixed(1) + 'w';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+            return num.toLocaleString();
+        }
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const currentValue = Math.floor(targetValue * easeOutQuart(progress));
+            element.textContent = formatNumber(currentValue);
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                element.textContent = formatNumber(targetValue);
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    async function loadSiteStats() {
+        if (!umamiConfig.enable) return;
+
+        try {
+            const { websiteId, token } = await getUmamiShareData(umamiConfig.baseUrl, umamiConfig.shareId);
+            const now = Date.now();
+            const statsUrl = `${umamiConfig.baseUrl}/api/websites/${websiteId}/stats?startAt=0&endAt=${now}&unit=hour&timezone=${encodeURIComponent(umamiConfig.timezone)}&compare=false`;
+
+            const res = await fetch(statsUrl, {
+                headers: { 'x-umami-share-token': token }
+            });
+
+            if (res.status === 401) {
+                clearUmamiShareCache();
+                return loadSiteStats();
+            }
+
+            const data = await res.json();
+            const pageviews = data.pageviews || 0;
+            const visitors = data.visitors || 0;
+
+            const pvEl = document.getElementById('site-pageviews');
+            const uvEl = document.getElementById('site-visitors');
+
+            if (pvEl) animateNumber(pvEl, pageviews, 1200);
+            if (uvEl) setTimeout(() => animateNumber(uvEl, visitors, 1000), 150);
+
+        } catch (err) {
+            console.error('Failed to load site stats:', err);
+            const pvEl = document.getElementById('site-pageviews');
+            const uvEl = document.getElementById('site-visitors');
+            if (pvEl) pvEl.textContent = '-';
+            if (uvEl) uvEl.textContent = '-';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSiteStats);
+</script>

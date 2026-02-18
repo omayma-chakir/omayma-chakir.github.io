@@ -15,7 +15,7 @@
     "lint": "biome check --write ./src",
     "preinstall": "npx only-allow pnpm",
     "predeploy": "astro build && pagefind --site dist",
-     "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -28,10 +28,11 @@
     "@expressive-code/plugin-line-numbers": "^0.41.3",
     "@fontsource-variable/jetbrains-mono": "^5.2.6",
     "@fontsource/roboto": "^5.2.6",
+    "@iconify-json/eos-icons": "^1.2.4",
     "@iconify-json/fa6-brands": "^1.2.6",
     "@iconify-json/fa6-regular": "^1.2.4",
     "@iconify-json/fa6-solid": "^1.2.4",
-    "@iconify-json/material-symbols": "^1.2.34",
+    "@iconify-json/material-symbols": "^1.2.55",
     "@iconify/svelte": "^4.2.0",
     "@swup/astro": "^1.7.0",
     "@tailwindcss/typography": "^0.5.16",

@@ -15,12 +15,19 @@ export const siteConfig: SiteConfig = {
 		hue: 285, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: true, // Hide the theme color picker for visitors
 	},
+
+
+    featurePages: {
+        skills: true,    
+    },
+
+
 	banner: {
 		enable: true,
 		src: "assets/images/banner11.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 		position: "bottom", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
-			enable: false, // Display the credit text of the banner image
+			enable: false, 
 			text: "", // Credit text to be displayed
 			url: "", // (Optional) URL link to the original artwork or artist's page
 		},
@@ -32,14 +39,14 @@ export const siteConfig: SiteConfig = {
 	favicon: [
 		// Leave this array empty to use the default favicon
 		 {
-		   src: '/favicon/favicon-32x32.ico',    // Path of the favicon, relative to the /public directory
-		//   theme: 'light',              // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
-		  sizes: '32x32',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
+		   src: '/favicon/favicon-32x32.ico',    
+		//   theme: 'light',              
+		  sizes: '32x32',          
 		 },
 		 {
-		   src: '/favicon/favicon-16x16.png',    // Path of the favicon, relative to the /public directory
-		//   theme: 'light',              // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
-		  sizes: '16x16',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
+		   src: '/favicon/favicon-16x16.png',   
+		//   theme: 'light',              
+		  sizes: '16x16',              
 		 },
 	],
 };
@@ -48,12 +55,12 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
-		LinkPreset.About,
+		LinkPreset.Skills,
 	],
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/moving.gif", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	avatar: "assets/images/moving.gif", 
 	name: "Security Researcher",
 	bio: "",
 	links: [
@@ -77,7 +84,27 @@ export const licenseConfig: LicenseConfig = {
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
-	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
-	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
 };
+
+import type { MusicPlayerConfig } from "./types/config";
+
+export const musicPlayerConfig: MusicPlayerConfig = {
+  enable: true,
+  mode: "local",          // use "meting" for online playlists
+  meting_api: "https://www.bilibili.uno/api?server=:server&type=:type&id=:id&auth=:auth&r=:r",
+  id: "14164869977",
+  server: "netease",
+  type: "playlist",
+};
+
+import type { UmamiConfig } from './types/config';
+
+export const umamiConfig: UmamiConfig = {
+  enable: true,
+  baseUrl: "https://cloud.umami.is",
+  shareId: "ntg10ABVGoWqh5pP",
+  timezone: "Europe/Paris",
+};
+
+
