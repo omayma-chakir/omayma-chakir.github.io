@@ -3,7 +3,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import MusicPlayer from "../components/widget/MusicPlayer.svelte";
-import { musicPlayerConfig } from "../config";
+import { musicPlayerConfig,umamiConfig  } from "../config";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -20,7 +20,6 @@ import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
 import { pathsEqual, url } from "../utils/url-utils";
 import "katex/dist/katex.css";
-
 interface Props {
 	title?: string;
 	banner?: string;
@@ -28,35 +27,26 @@ interface Props {
 	lang?: string;
 	setOGTypeArticle?: boolean;
 }
-
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
-
 const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
-
 const configHue = siteConfig.themeColor.hue;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
-
 banner = siteConfig.banner.src;
-
 const enableBanner = siteConfig.banner.enable;
-
 let pageTitle: string;
 if (title) {
 	pageTitle = `${title} - ${siteConfig.title}`;
 } else {
 	pageTitle = `${siteConfig.title} - ${siteConfig.subtitle}`;
 }
-
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
-
 if (!lang) {
 	lang = `${siteConfig.lang}`;
 }
 const siteLang = lang.replace("_", "-");
-
 const bannerOffsetByPosition = {
 	top: `${BANNER_HEIGHT_EXTEND}vh`,
 	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
@@ -65,7 +55,6 @@ const bannerOffsetByPosition = {
 const bannerOffset =
 	bannerOffsetByPosition[siteConfig.banner.position || "center"];
 ---
-
 <!DOCTYPE html>
 <html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]"
 	  data-overlayscrollbars-initialize
@@ -127,6 +116,10 @@ const bannerOffset =
 			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,
 		}}></style>
+		<!-- Umami share helper (for views/visitors API) -->
+		<script is:inline src="/js/umami-share.js"></script>
+		<!-- Umami tracking beacon -->
+		<script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="f1fad9a4-507d-4b11-b462-2eed688f06d8"></script>
 		<slot name="head"></slot>
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 	</head>
@@ -135,15 +128,12 @@ const bannerOffset =
 	>
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
-
-		<!-- ✅ Music Player — rendered fixed bottom-right, only when enabled in config -->
+		<!-- Music Player — rendered fixed bottom-right, only when enabled in config -->
 		{musicPlayerConfig?.enable && <MusicPlayer client:load />}
-
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
 	</body>
 </html>
-
 <style is:global define:vars={{
 	bannerOffset,
 	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
@@ -177,7 +167,6 @@ const bannerOffset =
 	}
 }
 </style>
-
 <script>
 import 'overlayscrollbars/overlayscrollbars.css';
 import {
@@ -192,9 +181,7 @@ import {
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT
 } from "../constants/constants";
 import { siteConfig } from '../config';
-
 const bannerEnabled = !!document.getElementById('banner-wrapper')
-
 function setClickOutsideToClose(panel: string, ignores: string[]) {
 	document.addEventListener("click", event => {
 		let panelDom = document.getElementById(panel);
@@ -212,16 +199,13 @@ function setClickOutsideToClose(panel: string, ignores: string[]) {
 setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"])
 setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"])
 setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"])
-
 function loadTheme() {
 	const theme = getStoredTheme()
 	setTheme(theme)
 }
-
 function loadHue() {
 	setHue(getHue())
 }
-
 function initCustomScrollbar() {
 	const bodyElement = document.querySelector('body');
 	if (!bodyElement) return;
@@ -239,7 +223,6 @@ function initCustomScrollbar() {
 			autoHideSuspend: false,
 		},
 	});
-
 	const katexElements = document.querySelectorAll('.katex-display') as NodeListOf<HTMLElement>;
 	const katexObserverOptions = {
 		root: null,
@@ -276,7 +259,6 @@ function initCustomScrollbar() {
 		katexObserver.observe(element);
 	});
 }
-
 function showBanner() {
 	if (!siteConfig.banner.enable) return;
 	const banner = document.getElementById('banner');
@@ -286,16 +268,13 @@ function showBanner() {
 	}
 	banner.classList.remove('opacity-0', 'scale-105');
 }
-
 function init() {
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
 	showBanner();
 }
-
 init();
-
 const setup = () => {
 	window.swup.hooks.on('link:click', () => {
 		document.documentElement.style.setProperty('--content-delay', '0ms')
@@ -352,11 +331,9 @@ if (window?.swup?.hooks) {
 } else {
 	document.addEventListener('swup:enable', setup)
 }
-
 let backToTopBtn = document.getElementById('back-to-top-btn');
 let toc = document.getElementById('toc-wrapper');
 let navbar = document.getElementById('navbar-wrapper')
-
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
 	if (backToTopBtn) {
@@ -390,21 +367,17 @@ function scrollFunction() {
 	}
 }
 window.onscroll = scrollFunction
-
 window.onresize = () => {
 	let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 	offset = offset - offset % 4;
 	document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
 }
 </script>
-
 <script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
 import "photoswipe/style.css"
-
 let lightbox: PhotoSwipeLightbox
 let pswp = import("photoswipe")
-
 function createPhotoSwipe() {
 	lightbox = new PhotoSwipeLightbox({
 		gallery: ".custom-md img, #post-cover img",
@@ -430,7 +403,6 @@ function createPhotoSwipe() {
 	})
 	lightbox.init()
 }
-
 const setup = () => {
 	if (!lightbox) {
 		createPhotoSwipe()
@@ -446,7 +418,6 @@ const setup = () => {
 		{ before: true },
 	)
 }
-
 if (window.swup) {
 	setup()
 } else {
