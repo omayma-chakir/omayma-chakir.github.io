@@ -105,8 +105,8 @@ export const umamiConfig: UmamiConfig = {
 
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
 	src: {
-		desktop: ["src/assets/images/banner1.png"],
-		mobile: ["src/assets/images/banner1.png"],
+		desktop: ["public/banner1.png"],
+		mobile: ["public/banner1.png"],
 	},
 	position: "center",
 	carousel: { enable: false, interval: 5 },
