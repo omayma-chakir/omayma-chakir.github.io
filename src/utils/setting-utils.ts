@@ -4,8 +4,8 @@ import {
 	DEFAULT_THEME,
 	LIGHT_MODE,
 } from "@constants/constants.ts";
-import { expressiveCodeConfig } from "@/config";
-import type { LIGHT_DARK_MODE } from "@/types/config";
+import { expressiveCodeConfig, siteConfig } from "@/config";
+import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 
 export function getDefaultHue(): number {
 	const fallback = "250";
@@ -43,8 +43,6 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 			}
 			break;
 	}
-
-	// Set the theme for Expressive Code
 	document.documentElement.setAttribute(
 		"data-theme",
 		expressiveCodeConfig.theme,
@@ -58,4 +56,18 @@ export function setTheme(theme: LIGHT_DARK_MODE): void {
 
 export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
+}
+
+export function getStoredWallpaperMode(): WALLPAPER_MODE {
+	return (
+		(localStorage.getItem("wallpaperMode") as WALLPAPER_MODE) ||
+		siteConfig.wallpaperMode.defaultMode
+	);
+}
+
+export function setWallpaperMode(mode: WALLPAPER_MODE): void {
+	localStorage.setItem("wallpaperMode", mode);
+	window.dispatchEvent(
+		new CustomEvent("wallpaper-mode-change", { detail: { mode } }),
+	);
 }

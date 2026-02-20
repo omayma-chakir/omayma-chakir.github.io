@@ -3,7 +3,6 @@ import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
 export type SiteConfig = {
 	title: string;
 	subtitle: string;
-
 	lang:
 		| "en"
 		| "zh_CN"
@@ -15,14 +14,21 @@ export type SiteConfig = {
 		| "vi"
 		| "tr"
 		| "id";
-
 	themeColor: {
 		hue: number;
 		fixed: boolean;
 	};
+	featurePages?: {
+		skills?: boolean;
+		timeline?: boolean;
+	};
+	wallpaperMode: {
+		defaultMode: "banner" | "fullscreen" | "none";
+		showModeSwitchOnMobile?: "off" | "mobile" | "desktop" | "both";
+	};
 	banner: {
 		enable: boolean;
-		src: string;
+		src: string | string[] | { desktop?: string | string[]; mobile?: string | string[] };
 		position?: "top" | "center" | "bottom";
 		credit: {
 			enable: boolean;
@@ -34,7 +40,6 @@ export type SiteConfig = {
 		enable: boolean;
 		depth: 1 | 2 | 3;
 	};
-
 	favicon: Favicon[];
 };
 
@@ -103,17 +108,28 @@ export type ExpressiveCodeConfig = {
 };
 
 export type MusicPlayerConfig = {
-    enable: boolean;
-    mode: "meting" | "local";
-    meting_api: string;
-    id: string;
-    server: string;
-    type: string;
+	enable: boolean;
+	mode: "meting" | "local";
+	meting_api: string;
+	id: string;
+	server: string;
+	type: string;
 };
 
-import type { MusicPlayerConfig } from "./types/config";
-export const musicPlayerConfig: MusicPlayerConfig = {
-    enable: true,
-    mode: "local", 
-    // API fields are ignored in local mode
+export type UmamiConfig = {
+	enable: boolean;
+	baseUrl: string;
+	shareId?: string;
+	timezone: string;
+};
+
+export type WALLPAPER_MODE = "banner" | "fullscreen" | "none";
+
+export type FullscreenWallpaperConfig = {
+	src: string | string[] | { desktop?: string | string[]; mobile?: string | string[] };
+	position?: "top" | "center" | "bottom";
+	carousel?: { enable: boolean; interval: number };
+	zIndex?: number;
+	opacity?: number;
+	blur?: number;
 };

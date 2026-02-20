@@ -5,6 +5,7 @@ export const LIGHT_MODE = "light",
 	AUTO_MODE = "auto";
 export const DEFAULT_THEME = LIGHT_MODE;
 
+
 // Banner height unit: vh
 export const BANNER_HEIGHT = 20;
 export const BANNER_HEIGHT_EXTEND = 10;
@@ -15,3 +16,10 @@ export const MAIN_PANEL_OVERLAPS_BANNER_HEIGHT = 3.5;
 
 // Page width: rem
 export const PAGE_WIDTH = 75;
+
+// Wallpaper mode constants
+export const WALLPAPER_BANNER = "banner";
+export const WALLPAPER_FULLSCREEN = "fullscreen";
+export const WALLPAPER_NONE = "none";
+
+

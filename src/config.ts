@@ -1,53 +1,53 @@
 import type {
 	ExpressiveCodeConfig,
+	FullscreenWallpaperConfig,
 	LicenseConfig,
+	MusicPlayerConfig,
 	NavBarConfig,
 	ProfileConfig,
 	SiteConfig,
+	UmamiConfig,
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
 	title: "Omayma CHAKIR",
 	subtitle: "Blog",
-	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
+	lang: "en",
 	themeColor: {
-		hue: 285, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
-		fixed: true, // Hide the theme color picker for visitors
+		hue: 285,
+		fixed: true,
 	},
-
-
-    featurePages: {
-        skills: true,    
-    },
-
-
+	featurePages: {
+		skills: true,
+	},
+	wallpaperMode: {
+		defaultMode: "banner",
+		showModeSwitchOnMobile: "desktop",
+	},
 	banner: {
 		enable: true,
-		src: "assets/images/banner11.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-		position: "bottom", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		src: "assets/images/banner11.png",
+		position: "bottom",
 		credit: {
-			enable: false, 
-			text: "", // Credit text to be displayed
-			url: "", // (Optional) URL link to the original artwork or artist's page
+			enable: false,
+			text: "",
+			url: "",
 		},
 	},
 	toc: {
-		enable: true, // Display the table of contents on the right side of the post
-		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
+		enable: true,
+		depth: 2,
 	},
 	favicon: [
-		// Leave this array empty to use the default favicon
-		 {
-		   src: '/favicon/favicon-32x32.ico',    
-		//   theme: 'light',              
-		  sizes: '32x32',          
-		 },
-		 {
-		   src: '/favicon/favicon-16x16.png',   
-		//   theme: 'light',              
-		  sizes: '16x16',              
-		 },
+		{
+			src: "/favicon/favicon-32x32.ico",
+			sizes: "32x32",
+		},
+		{
+			src: "/favicon/favicon-16x16.png",
+			sizes: "16x16",
+		},
 	],
 };
 
@@ -60,7 +60,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/moving.gif", 
+	avatar: "assets/images/moving.gif",
 	name: "Security Researcher",
 	bio: "",
 	links: [
@@ -87,24 +87,30 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	theme: "github-dark",
 };
 
-import type { MusicPlayerConfig } from "./types/config";
-
 export const musicPlayerConfig: MusicPlayerConfig = {
-  enable: true,
-  mode: "local",          // use "meting" for online playlists
-  meting_api: "https://www.bilibili.uno/api?server=:server&type=:type&id=:id&auth=:auth&r=:r",
-  id: "14164869977",
-  server: "netease",
-  type: "playlist",
+	enable: true,
+	mode: "local",
+	meting_api: "https://www.bilibili.uno/api?server=:server&type=:type&id=:id&auth=:auth&r=:r",
+	id: "14164869977",
+	server: "netease",
+	type: "playlist",
 };
-
-import type { UmamiConfig } from './types/config';
 
 export const umamiConfig: UmamiConfig = {
-  enable: true,
-  baseUrl: "https://cloud.umami.is",
-  shareId: "ntg10ABVGoWqh5pP",
-  timezone: "Europe/Paris",
+	enable: true,
+	baseUrl: "https://cloud.umami.is",
+	shareId: "ntg10ABVGoWqh5pP",
+	timezone: "Europe/Paris",
 };
 
-
+export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
+	src: {
+		desktop: ["/src/assets/images/banner1.png"],
+		mobile: ["/src/assets/images/banner1.png"],
+	},
+	position: "center",
+	carousel: { enable: false, interval: 5 },
+	zIndex: -1,
+	opacity: 0.85,
+	blur: 0,
+};

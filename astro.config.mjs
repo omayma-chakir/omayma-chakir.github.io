@@ -8,10 +8,10 @@ import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeComponents from "rehype-components"; /* Render the custom directive content */
+import rehypeComponents from "rehype-components";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
-import remarkDirective from "remark-directive"; /* Handle directives */
+import remarkDirective from "remark-directive";
 import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
@@ -35,9 +35,7 @@ export default defineConfig({
 		}),
 		swup({
 			theme: false,
-			animationClass: "transition-swup-", // see https://swup.js.org/options/#animationselector
-			// the default value `transition-` cause transition delay
-			// when the Tailwind class `transition-all` is used
+			animationClass: "transition-swup-",
 			containers: ["main", "#toc"],
 			smoothScrolling: true,
 			cache: true,
@@ -49,10 +47,11 @@ export default defineConfig({
 		}),
 		icon({
 			include: {
-				"preprocess: vitePreprocess(),": ["*"],
+				"material-symbols": ["*"],
 				"fa6-brands": ["*"],
 				"fa6-regular": ["*"],
 				"fa6-solid": ["*"],
+				"eos-icons": ["*"],
 			},
 		}),
 		expressiveCode({
@@ -61,12 +60,12 @@ export default defineConfig({
 				pluginCollapsibleSections(),
 				pluginLineNumbers(),
 				pluginLanguageBadge(),
-				pluginCustomCopyButton()
+				pluginCustomCopyButton(),
 			],
 			defaultProps: {
 				wrap: true,
 				overridesByLang: {
-					'shellsession': {
+					shellsession: {
 						showLineNumbers: false,
 					},
 				},
@@ -76,7 +75,8 @@ export default defineConfig({
 				borderRadius: "0.75rem",
 				borderColor: "none",
 				codeFontSize: "0.875rem",
-				codeFontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+				codeFontFamily:
+					"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 				codeLineHeight: "1.5rem",
 				frames: {
 					editorBackground: "var(--codeblock-bg)",
@@ -87,19 +87,19 @@ export default defineConfig({
 					editorActiveTabIndicatorBottomColor: "var(--primary)",
 					editorActiveTabIndicatorTopColor: "none",
 					editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
-					terminalTitlebarBorderBottomColor: "none"
+					terminalTitlebarBorderBottomColor: "none",
 				},
 				textMarkers: {
 					delHue: 0,
 					insHue: 180,
-					markHue: 250
-				}
+					markHue: 250,
+				},
 			},
 			frames: {
 				showCopyToClipboardButton: false,
-			}
+			},
 		}),
-        svelte(),
+		svelte(),
 		sitemap(),
 	],
 	markdown: {
@@ -157,7 +157,6 @@ export default defineConfig({
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {
-					// temporarily suppress this warning
 					if (
 						warning.message.includes("is dynamically imported by") &&
 						warning.message.includes("but also statically imported by")

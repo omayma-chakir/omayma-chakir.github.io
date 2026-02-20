@@ -1,0 +1,86 @@
+/* ============================================
+   Wallpaper Navbar Transparent System
+   Controls navbar appearance per wallpaper mode
+   ============================================ */
+:root {
+    --nav-bg: var(--card-bg);
+    --nav-blur: none;
+    --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --nav-radius: var(--radius-large);
+    --panel-bg: var(--card-bg);
+    --panel-blur: none;
+}
+:root.dark {
+    --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   Navbar core — driven entirely by CSS variables
+   ============================================ */
+#navbar > div {
+    background: var(--nav-bg) !important;
+    backdrop-filter: var(--nav-blur) !important;
+    -webkit-backdrop-filter: var(--nav-blur) !important;
+    box-shadow: var(--nav-shadow) !important;
+    border-radius: var(--nav-radius) !important;
+    border: none !important;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease;
+    will-change: background, backdrop-filter;
+}
+
+/* ============================================
+   Fullscreen wallpaper mode — frosted glass navbar
+   ============================================ */
+body.wallpaper-transparent #navbar > div {
+    --nav-bg: rgba(255, 255, 255, 0.55);
+    --nav-blur: blur(12px);
+    --nav-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+:root.dark body.wallpaper-transparent #navbar > div {
+    --nav-bg: rgba(20, 20, 30, 0.55);
+    --nav-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   Float panels (search, display settings, etc.)
+   ============================================ */
+body.wallpaper-transparent :is(
+    #nav-menu-panel,
+    #display-setting,
+    #search-panel,
+    #wallpaper-mode-panel .card-base
+) {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+:root.dark body.wallpaper-transparent :is(
+    #nav-menu-panel,
+    #display-setting,
+    #search-panel,
+    #wallpaper-mode-panel .card-base
+) {
+    background: rgba(24, 24, 36, 0.85) !important;
+}
+
+/* ============================================
+   Banner mode & None mode — normal solid Fuwari navbar
+   Defaults from :root apply, nothing to override
+   ============================================ */
+
+/* ============================================
+   Mobile adjustments
+   ============================================ */
+@media (max-width: 1023px) {
+    #navbar > div {
+        border-radius: 0.5rem !important;
+    }
+}
+
+/* ============================================
+   Wallpaper mode panel specific
+   ============================================ */
+#wallpaper-mode-panel .card-base {
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}

@@ -1,0 +1,125 @@
+---
+import { fullscreenWallpaperConfig, siteConfig } from "../../config";
+
+// Get image sources
+const getImageSources = async () => {
+    const config = fullscreenWallpaperConfig;
+    let srcConfig = config?.src;
+
+    // API image logic - reuse banner API if configured
+    if (siteConfig.banner.imageApi?.enable && siteConfig.banner.imageApi?.url) {
+        try {
+            const response = await fetch(siteConfig.banner.imageApi.url);
+            const text = await response.text();
+            const apiImages = text.split("\n").filter((line) => line.trim());
+            if (apiImages.length > 0) {
+                return { desktop: apiImages, mobile: apiImages };
+            }
+        } catch (error) {
+            console.warn("Failed to fetch images from API:", error);
+        }
+    }
+
+    const toArray = (src: string | string[] | undefined): string[] =>
+        Array.isArray(src) ? src : (typeof src === "string" ? [src] : []);
+
+    // If fullscreenWallpaperConfig has its own src, use it
+    if (srcConfig) {
+        if (typeof srcConfig === "object" && !Array.isArray(srcConfig)) {
+            const desktop = toArray((srcConfig as any).desktop);
+            const mobile = toArray((srcConfig as any).mobile);
+            return {
+                desktop: desktop.length > 0 ? desktop : mobile,
+                mobile: mobile.length > 0 ? mobile : desktop,
+            };
+        }
+        const allImages = toArray(srcConfig as string | string[]);
+        if (allImages.length > 0) return { desktop: allImages, mobile: allImages };
+    }
+
+    // Fallback: use banner image
+    const bannerSrc = siteConfig.banner.src;
+    if (typeof bannerSrc === "string" && bannerSrc) {
+        const src = bannerSrc.startsWith('/') ? bannerSrc : `/${bannerSrc}`;
+        return { desktop: [src], mobile: [src] };
+    }
+    if (Array.isArray(bannerSrc) && bannerSrc.length > 0) {
+        const srcs = bannerSrc.map(s => s.startsWith('/') ? s : `/${s}`);
+        return { desktop: srcs, mobile: srcs };
+    }
+
+    return { desktop: [], mobile: [] };
+};
+
+const imageSources = await getImageSources();
+const hasImages = imageSources.desktop.length > 0 || imageSources.mobile.length > 0;
+
+if (!hasImages) return null;
+
+const config = fullscreenWallpaperConfig;
+const opacity = config?.opacity ?? 0.85;
+const blurAmount = config?.blur ?? 0;
+const zIndex = config?.zIndex ?? -1;
+const position = config?.position ?? "center";
+const positionClass = position === "top" ? "object-top" : position === "bottom" ? "object-bottom" : "object-center";
+
+const desktopImages = imageSources.desktop;
+const mobileImages = imageSources.mobile.length > 0 ? imageSources.mobile : imageSources.desktop;
+---
+
+<div
+    id="fullscreen-wallpaper"
+    class="fixed inset-0 w-full h-full overflow-hidden pointer-events-none"
+    style={`z-index: ${zIndex}; opacity: ${opacity};`}
+>
+    <script is:inline>
+    // Anti-flash: hide immediately if not in fullscreen mode
+    (function() {
+        const mode = localStorage.getItem('wallpaperMode') || 'banner';
+        if (mode !== 'fullscreen') {
+            document.getElementById('fullscreen-wallpaper').style.display = 'none';
+        }
+    })();
+    </script>
+
+    <div id="fullscreen-wallpaper-inner" class="w-full h-full relative">
+        <script is:inline define:vars={{ desktopImages, mobileImages, positionClass, blurAmount }}>
+            (function() {
+                const container = document.getElementById('fullscreen-wallpaper-inner');
+                if (!container) return;
+
+                // Pick a random image (avoid repeating last one)
+                const getRandomImage = (images, storageKey) => {
+                    if (!images || images.length === 0) return null;
+                    if (images.length === 1) return images[0];
+                    const lastIndex = sessionStorage.getItem(storageKey);
+                    let newIndex;
+                    do {
+                        newIndex = Math.floor(Math.random() * images.length);
+                    } while (String(newIndex) === lastIndex);
+                    sessionStorage.setItem(storageKey, String(newIndex));
+                    return images[newIndex];
+                };
+
+                const desktopSrc = getRandomImage(desktopImages, 'fw_desktop_idx');
+                const mobileSrc = getRandomImage(mobileImages, 'fw_mobile_idx');
+
+                const blurStyle = blurAmount > 0 ? `filter: blur(${blurAmount}px);` : '';
+
+                if (desktopSrc) {
+                    const div = document.createElement('div');
+                    div.className = 'hidden md:block absolute inset-0 w-full h-full';
+                    div.innerHTML = `<img src="${desktopSrc}" alt="fullscreen wallpaper" class="absolute inset-0 w-full h-full object-cover ${positionClass}" style="transform:translateZ(0);${blurStyle}" loading="eager" decoding="async"/>`;
+                    container.appendChild(div);
+                }
+
+                if (mobileSrc) {
+                    const div = document.createElement('div');
+                    div.className = 'block md:hidden absolute inset-0 w-full h-full';
+                    div.innerHTML = `<img src="${mobileSrc}" alt="fullscreen wallpaper" class="absolute inset-0 w-full h-full object-cover ${positionClass}" style="transform:translateZ(0);${blurStyle}" loading="eager" decoding="async"/>`;
+                    container.appendChild(div);
+                }
+            })();
+        </script>
+    </div>
+</div>

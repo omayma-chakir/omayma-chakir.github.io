@@ -3,40 +3,30 @@ enum I18nKey {
 	about = "about",
 	archive = "archive",
 	search = "search",
-
 	skills = "skills",
 	timeline = "timeline",
-
 	tags = "tags",
 	categories = "categories",
 	recentPosts = "recentPosts",
-
 	comments = "comments",
-
 	untitled = "untitled",
 	uncategorized = "uncategorized",
 	noTags = "noTags",
-
 	wordCount = "wordCount",
 	wordsCount = "wordsCount",
 	minuteCount = "minuteCount",
 	minutesCount = "minutesCount",
 	postCount = "postCount",
 	postsCount = "postsCount",
-
 	themeColor = "themeColor",
-
 	lightMode = "lightMode",
 	darkMode = "darkMode",
 	systemMode = "systemMode",
-
 	more = "more",
-
 	author = "author",
 	publishedAt = "publishedAt",
 	license = "license",
-  
-	
+
 	skillsSubtitle = "skillsSubtitle",
 	skillsFrontend = "skillsFrontend",
 	skillsBackend = "skillsBackend",
@@ -63,29 +53,32 @@ enum I18nKey {
 	skillsByCategory = "skillsByCategory",
 	noData = "noData",
 
-    musicPlayer = "musicPlayer",
-    musicPlayerShow = "musicPlayerShow",
-    musicPlayerHide = "musicPlayerHide",
-    musicPlayerExpand = "musicPlayerExpand",
-    musicPlayerCollapse = "musicPlayerCollapse",
-    musicPlayerPause = "musicPlayerPause",
-    musicPlayerPlay = "musicPlayerPlay",
-    musicPlayerPrevious = "musicPlayerPrevious",
-    musicPlayerNext = "musicPlayerNext",
-    musicPlayerShuffle = "musicPlayerShuffle",
-    musicPlayerRepeat = "musicPlayerRepeat",
-    musicPlayerRepeatOne = "musicPlayerRepeatOne",
-    musicPlayerVolume = "musicPlayerVolume",
-    musicPlayerProgress = "musicPlayerProgress",
-    musicPlayerCover = "musicPlayerCover",
-    musicPlayerPlaylist = "musicPlayerPlaylist",
-    musicPlayerLoading = "musicPlayerLoading",
-    musicPlayerErrorPlaylist = "musicPlayerErrorPlaylist",
-    musicPlayerErrorSong = "musicPlayerErrorSong",
-    musicPlayerErrorEmpty = "musicPlayerErrorEmpty",
-    unknownSong = "unknownSong",
-    unknownArtist = "unknownArtist",
+	musicPlayer = "musicPlayer",
+	musicPlayerShow = "musicPlayerShow",
+	musicPlayerHide = "musicPlayerHide",
+	musicPlayerExpand = "musicPlayerExpand",
+	musicPlayerCollapse = "musicPlayerCollapse",
+	musicPlayerPause = "musicPlayerPause",
+	musicPlayerPlay = "musicPlayerPlay",
+	musicPlayerPrevious = "musicPlayerPrevious",
+	musicPlayerNext = "musicPlayerNext",
+	musicPlayerShuffle = "musicPlayerShuffle",
+	musicPlayerRepeat = "musicPlayerRepeat",
+	musicPlayerRepeatOne = "musicPlayerRepeatOne",
+	musicPlayerVolume = "musicPlayerVolume",
+	musicPlayerProgress = "musicPlayerProgress",
+	musicPlayerCover = "musicPlayerCover",
+	musicPlayerPlaylist = "musicPlayerPlaylist",
+	musicPlayerLoading = "musicPlayerLoading",
+	musicPlayerErrorPlaylist = "musicPlayerErrorPlaylist",
+	musicPlayerErrorSong = "musicPlayerErrorSong",
+	musicPlayerErrorEmpty = "musicPlayerErrorEmpty",
+	unknownSong = "unknownSong",
+	unknownArtist = "unknownArtist",
 
+	wallpaperBanner = "wallpaperBanner",
+	wallpaperFullscreen = "wallpaperFullscreen",
+	wallpaperNone = "wallpaperNone",
 }
 
 export default I18nKey;
