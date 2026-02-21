@@ -35,8 +35,6 @@ const hasBannerCredit =
 	siteConfig.banner.enable && siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 const defaultMode = siteConfig.wallpaperMode.defaultMode;
-// Server-side initial top value — the inline script will immediately correct
-// this before first paint so there is no flash
 const mainPanelTop = defaultMode === "banner" && siteConfig.banner.enable
 	? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
 	: "5.5rem";
@@ -44,15 +42,7 @@ const tocInitiallyHidden = defaultMode === "banner" && siteConfig.banner.enable;
 ---
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 <slot slot="head" name="head"></slot>
-<!-- Fullscreen wallpaper — always rendered, shown/hidden by JS -->
 <FullscreenWallpaper />
-<!--
-    CRITICAL: runs before first paint.
-    1. Applies correct body classes for the stored mode.
-    2. Hides/shows banner-wrapper and fullscreen-wallpaper immediately.
-    3. Fixes main content top position.
-    This prevents ANY visual flash on load.
--->
 <script is:inline define:vars={{
     defaultWallpaperMode: siteConfig.wallpaperMode.defaultMode,
     BANNER_HEIGHT: BANNER_HEIGHT,
@@ -62,7 +52,6 @@ const tocInitiallyHidden = defaultMode === "banner" && siteConfig.banner.enable;
 (function () {
     var mode = localStorage.getItem('wallpaperMode') || defaultWallpaperMode;
     var body = document.body;
-    // 1. Apply body classes immediately
     body.classList.remove('enable-banner', 'wallpaper-transparent', 'no-banner-mode');
     switch (mode) {
         case 'banner':
@@ -76,7 +65,6 @@ const tocInitiallyHidden = defaultMode === "banner" && siteConfig.banner.enable;
             body.classList.add('no-banner-mode');
             break;
     }
-    // 2. Show/hide banner-wrapper and fullscreen-wallpaper immediately
     var applied = { banner: false, fullscreen: false, main: false };
     function applyToElement(el) {
         if (!el) return;
@@ -100,11 +88,9 @@ const tocInitiallyHidden = defaultMode === "banner" && siteConfig.banner.enable;
             }
         }
     }
-    // Try immediately in case elements already exist
     applyToElement(document.getElementById('banner-wrapper'));
     applyToElement(document.getElementById('fullscreen-wallpaper'));
     applyToElement(document.querySelector('.wallpaper-main-content'));
-    // Watch for elements that haven't rendered yet
     if (!applied.banner || !applied.fullscreen || !applied.main) {
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(m) {
@@ -122,7 +108,6 @@ const tocInitiallyHidden = defaultMode === "banner" && siteConfig.banner.enable;
         observer.observe(document.documentElement, { childList: true, subtree: true });
     }
 })();
-// Runtime mode switching — fired by WallpaperSwitch.svelte
 window.addEventListener('wallpaper-mode-change', function () {
     var mode = localStorage.getItem('wallpaperMode') || defaultWallpaperMode;
     var body = document.body;
@@ -130,9 +115,8 @@ window.addEventListener('wallpaper-mode-change', function () {
     var fullscreenWallpaper  = document.getElementById('fullscreen-wallpaper');
     var mainContent          = document.querySelector('.wallpaper-main-content');
     var tocWrapper           = document.getElementById('toc-wrapper');
-    // Remove all mode classes first, force reflow, then add correct one
     body.classList.remove('enable-banner', 'wallpaper-transparent', 'no-banner-mode');
-    void body.offsetHeight; // force reflow
+    void body.offsetHeight;
     switch (mode) {
         case 'banner':
             if (bannerEnabled) body.classList.add('enable-banner');
@@ -161,13 +145,11 @@ window.addEventListener('wallpaper-mode-change', function () {
     }
 });
 </script>
-<!-- Navbar -->
 <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto">
     <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
         <Navbar></Navbar>
     </div>
 </div>
-<!-- Banner — only rendered if banner.enable is true in config -->
 {siteConfig.banner.enable && (
     <div id="banner-wrapper" class="absolute z-10 w-full transition duration-700 overflow-hidden" style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
         <ImageWrapper
@@ -179,11 +161,9 @@ window.addEventListener('wallpaper-mode-change', function () {
         />
     </div>
 )}
-<!-- Main content -->
 <div class="wallpaper-main-content absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
     <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
         <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
-            <!-- Banner credit -->
             {hasBannerCredit && (
                 <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                    class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
@@ -213,7 +193,6 @@ window.addEventListener('wallpaper-mode-change', function () {
         <BackToTop />
     </div>
 </div>
-<!-- TOC -->
 <div class="absolute w-full z-0 hidden 2xl:block">
     <div class="relative max-w-[var(--page-width)] mx-auto">
         {siteConfig.toc.enable && (
@@ -235,7 +214,7 @@ window.addEventListener('wallpaper-mode-change', function () {
 </div>
 </Layout>
 <style is:global>
-/* No banner / fullscreen / none mode — content sits under navbar */
+/* No banner / none mode — content sits under navbar */
 body.no-banner-mode .wallpaper-main-content {
     top: 5.5rem !important;
 }
@@ -249,17 +228,16 @@ body.wallpaper-transparent .wallpaper-main-content {
         top: calc(20vh - 3.5rem) !important;
     }
 }
-/* Fullscreen mode — frosted glass TOC */
+/* Fullscreen mode — TOC has no glass, just transparent */
 body.wallpaper-transparent #toc-inner-wrapper {
-    background: var(--card-bg-transparent, rgba(255, 255, 255, 0.7)) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-radius: 0.75rem;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 :root.dark body.wallpaper-transparent #toc-inner-wrapper {
-    background: rgba(30, 30, 40, 0.7) !important;
+    background: transparent !important;
 }
-/* Frosted glass cards in fullscreen mode — only top-level cards */
+/* Frosted glass cards in fullscreen mode */
 body.wallpaper-transparent .card-base {
     background: var(--card-bg-transparent, rgba(255, 255, 255, 0.75)) !important;
     backdrop-filter: blur(16px) !important;
@@ -268,12 +246,11 @@ body.wallpaper-transparent .card-base {
 :root.dark body.wallpaper-transparent .card-base {
     background: rgba(25, 25, 35, 0.75) !important;
 }
-/* Nested cards inside cards — no extra glass, just transparent */
+/* Nested cards inside cards — no extra glass */
 body.wallpaper-transparent .card-base .card-base {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
 }
-
 </style>
